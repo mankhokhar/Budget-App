@@ -49,7 +49,7 @@ var BudgetController = (function () {
     		},
 
     	getBudget: function(){
-    		return [totalBudget,totalIncome,totalExpenses];
+    		return [totalBudget,totalIncome,totalExpenses,incomeList,expensesList];
     		}
 
     }
@@ -65,9 +65,54 @@ var UIController = (function(){
 		document.querySelector(".budget__expenses--value").innerHTML = "-" + expense; 
 	}
 
+	function showIncomeList(incomeList){
+		document.querySelector(".income__list").innerHTML = "";
+		incomeList.forEach(function(curr,index){
+			$(".income__list").append(
+				'<div class="item clearfix" id="income-'+ index +'">' +
+                    '<div class="item__description">' + curr.name + '</div>' +
+		                   '<div class="right clearfix">' +
+                    			'<div class="item__value">+ ' + curr.value + '</div>' +
+                    			'<div class="item__delete">' +
+                        			'<button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>'+
+                    			'</div>' +
+                			'</div>' +
+                '</div>'
+
+
+			);
+		});
+	}
+
+	function showExpenseList(expenseList){
+		document.querySelector(".expenses__list").innerHTML = "";
+		expenseList.forEach(function(curr,index){
+			$(".expenses__list").append(
+				'<div class="item clearfix" id="expense-' + index + '">' +
+                    '<div class="item__description">' + curr.name + '</div>' +
+                    '<div class="right clearfix">' +
+                        '<div class="item__value">-' + curr.value + '</div>' +
+                        '<div class="item__percentage">' + '21%' + '</div>' +
+                        '<div class="item__delete">' +
+                            '<button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>'
+			);
+		});
+	}
+
 	return{
 		showBudget: function(budget,income,expense){
 			displayBudget(budget,income,expense);
+		},
+
+		showIncome: function(list){
+			showIncomeList(list);
+		},
+
+		showExpense: function(list){
+			showExpenseList(list);
 		}
 	}
 
@@ -86,6 +131,8 @@ var controller = (function(budgetCtrl,UICtrl){
 		
 		var budget = budgetCtrl.getBudget();
 		UICtrl.showBudget(budget[0],budget[1],budget[2]);
+		UICtrl.showIncome(budget[3]);
+		UICtrl.showExpense(budget[4]);
 
 	});
 
