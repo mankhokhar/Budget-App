@@ -18,7 +18,7 @@ var BudgetController = (function () {
 	//functions
 
 	function addItem(itemName,itemValue,itemType){
-		if (itemType=="in"){
+		if (itemType=="inc"){
 			incomeList.push(new item(itemName,itemValue))
 		}else{
 			expensesList.push(new item(itemName,itemValue))
@@ -48,11 +48,7 @@ var BudgetController = (function () {
     		addItem(iName,iValue,iType);
     		calculateBudget();
     		calclulateTotal();
-    	},
-
-        publicTest: function (b) {
-            console.log(add(b));
-        }
+    		}
     }
 
 
@@ -62,8 +58,8 @@ var UIController = (function(){
 
 	function displayBudget(budget,income,expense){
 		document.querySelector(".budget__value").innerHTML = budget;
-		document.querySelector(".budget__income--value").innerHTML = income;
-		document.querySelector(".budget__expenses--value").innerHTML = expense; 
+		document.querySelector(".budget__income--value").innerHTML = "+" + income;
+		document.querySelector(".budget__expenses--value").innerHTML = "-" + expense; 
 	}
 
 	return{
@@ -75,20 +71,24 @@ var UIController = (function(){
 })();
 
 
-UIController.showBudget(400,600,-200);
+//app controller
+var controller = (function(budgetCtrl,UICtrl){
 
-// //app controller
-// var controller = (function(budgetCtrl,UICtrl){
+	//eventlistener for add button (tick mark)
+	document.querySelector(".add__btn").addEventListener("click",function(){
+		var iType = document.querySelector(".add__type").value;
+		var iName = document.querySelector(".add__description").value
+		var iValue = document.querySelector(".add__value").value
+		budgetCtrl.add(iName,iValue,iType);
+	});
 
-// 	var res = budgetCtrl.publicTest(5);
+	return{
 
-// 	return{
-// 		publicResult: function(){
-// 			console.log(res);
-// 		}
-// 	}
 
-// })(BudgetController,UIController);
+
+	}
+
+})(BudgetController,UIController);
 
 
 
