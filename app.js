@@ -26,8 +26,10 @@ var BudgetController = (function () {
 	}
 
 	function calculateBudget(){
+		totalIncome = 0;
+		totalExpenses = 0;
 		incomeList.forEach(function(curr){
-			totalIncome += curr.value;
+			totalIncome +=  curr.value;
 		});
 		expensesList.forEach(function(curr){
 			totalExpenses += curr.value;
@@ -38,17 +40,18 @@ var BudgetController = (function () {
 		totalBudget = totalIncome - totalExpenses;
 	}
 
-	function getBudget(){
-		return totalBudget;
-	}
-
     return {
 
     	add: function(iName,iValue,iType){
     		addItem(iName,iValue,iType);
     		calculateBudget();
     		calclulateTotal();
+    		},
+
+    	getBudget: function(){
+    		return [totalBudget,totalIncome,totalExpenses];
     		}
+
     }
 
 
@@ -78,8 +81,12 @@ var controller = (function(budgetCtrl,UICtrl){
 	document.querySelector(".add__btn").addEventListener("click",function(){
 		var iType = document.querySelector(".add__type").value;
 		var iName = document.querySelector(".add__description").value
-		var iValue = document.querySelector(".add__value").value
+		var iValue = parseInt(document.querySelector(".add__value").value)
 		budgetCtrl.add(iName,iValue,iType);
+		
+		var budget = budgetCtrl.getBudget();
+		UICtrl.showBudget(budget[0],budget[1],budget[2]);
+
 	});
 
 	return{
