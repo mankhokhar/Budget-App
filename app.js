@@ -40,6 +40,14 @@ var BudgetController = (function () {
 		totalBudget = totalIncome - totalExpenses;
 	}
 
+	function deleteIncomeItem(index){
+		incomeList.splice(index,1);
+	}
+
+	function deleteExpensesItem(index){
+		expensesList.splice(index,1);
+	}
+
     return {
 
     	add: function(iName,iValue,iType){
@@ -50,7 +58,17 @@ var BudgetController = (function () {
 
     	getBudget: function(){
     		return [totalBudget,totalIncome,totalExpenses,incomeList,expensesList];
+    		},
+
+    	del_item: function(type,index){
+    		if (type=="income"){
+    			deleteIncomeItem(index);
+    		}else{
+    			deleteExpensesItem(index);
     		}
+    		calculateBudget();
+    		calclulateTotal();
+    	}
 
     }
 
@@ -123,28 +141,56 @@ var UIController = (function(){
 var controller = (function(budgetCtrl,UICtrl){
 
 	//eventlistener for add button (tick mark)
-	document.querySelector(".add__btn").addEventListener("click",function(){
-		var iType = document.querySelector(".add__type").value;
-		var iName = document.querySelector(".add__description").value
-		var iValue = parseInt(document.querySelector(".add__value").value)
-		budgetCtrl.add(iName,iValue,iType);
-		
-		var budget = budgetCtrl.getBudget();
-		UICtrl.showBudget(budget[0],budget[1],budget[2]);
-		UICtrl.showIncome(budget[3]);
-		UICtrl.showExpense(budget[4]);
+	function add_btn(){
+		document.querySelector(".add__btn").addEventListener("click",function(){
+			var iType = document.querySelector(".add__type").value;
+			var iName = document.querySelector(".add__description").value
+			var iValue = parseInt(document.querySelector(".add__value").value)
+			budgetCtrl.add(iName,iValue,iType);
+			
+			var budget = budgetCtrl.getBudget();
+			UICtrl.showBudget(budget[0],budget[1],budget[2]);
+			UICtrl.showIncome(budget[3]);
+			UICtrl.showExpense(budget[4]);
+			delete_btn();
 
-	});
+		});
+	}
+
+	function delete_btn(){
+		$(".item__delete--btn").on("click",function(){
+			var id = this.parentElement.parentElement.parentElement.id;
+			console.log(id);
+
+			[type, index] = id.split("-");
+
+			budgetCtrl.del_item(type,index); 
+
+			var budget = budgetCtrl.getBudget();
+			UICtrl.showBudget(budget[0],budget[1],budget[2]);
+			UICtrl.showIncome(budget[3]);
+			UICtrl.showExpense(budget[4]);
+			delete_btn();
+		});
+	}
 
 	return{
 
+		ctrl_addBtn: function(){
+			add_btn();
+		},
 
+		ctrl_delete_btn:function(){
+			delete_btn();
+		}
 
 	}
 
 })(BudgetController,UIController);
 
 
+controller.ctrl_addBtn();
+// controller.ctrl_delete_btn();
 
 
 
