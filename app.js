@@ -131,7 +131,15 @@ var UIController = (function(){
 
 		showExpense: function(list){
 			showExpenseList(list);
-		}
+		},
+		showMonth: function(){
+                            var dt = new Date();
+                            var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                            var m = months[dt.getMonth()];
+                            var y = dt.getFullYear();
+                            document.querySelector('.budget__title--month').innerHTML = m + ', ' + y;
+                        },
+
 	}
 
 })();
@@ -152,6 +160,7 @@ var controller = (function(budgetCtrl,UICtrl){
 			UICtrl.showBudget(budget[0],budget[1],budget[2]);
 			UICtrl.showIncome(budget[3]);
 			UICtrl.showExpense(budget[4]);
+			UICtrl.showMonth();
 			delete_btn();
 
 		});
@@ -170,6 +179,7 @@ var controller = (function(budgetCtrl,UICtrl){
 			UICtrl.showBudget(budget[0],budget[1],budget[2]);
 			UICtrl.showIncome(budget[3]);
 			UICtrl.showExpense(budget[4]);
+			UICtrl.showMonth();
 			delete_btn();
 		});
 	}
